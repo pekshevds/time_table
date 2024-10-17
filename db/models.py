@@ -29,7 +29,7 @@ class Сourse(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(25))
-    students: Mapped[List["MarkTable"]] = relationship(
+    students: Mapped[List["Student"]] = relationship(
         back_populates="course", cascade="all, delete-orphan"
     )
 
@@ -66,3 +66,12 @@ class MarkTable(Base):
 
     def __str__(self) -> str:
         return f"Student ({self.id}, {self.name})"
+
+
+__all__ = (
+    "Base",
+    "Subject",
+    "Сourse",
+    "Student",
+    "MarkTable",
+)
