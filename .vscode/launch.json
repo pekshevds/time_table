@@ -5,28 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Django",
-            "type": "python",
+            "name": "Python Debugger: FastAPI",
+            "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}\\manage.py",
-            "args": [
-                "runserver",
-                "--no-color",
-                "--noreload"
-            ],            
-            "django": true,
-            "justMyCode": true
-        },
-        {
-            "name": "Python: shell",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}\\manage.py",
-            "args": [
-                "shell"
-            ],            
-            "django": true,
-            "justMyCode": true
+            "module": "server",
+            "args": [],
+            "jinja": true
         }
     ]
 }

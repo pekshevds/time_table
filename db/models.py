@@ -24,7 +24,7 @@ class Subject(Base):
         return f"Subject ({self.name})"
 
 
-class Сourse(Base):
+class Course(Base):
     __tablename__ = "course"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -47,7 +47,7 @@ class Student(Base):
         back_populates="student", cascade="all, delete-orphan"
     )
     course_id: Mapped[int] = mapped_column(ForeignKey("course.id"))
-    course: Mapped["Сourse"] = relationship(back_populates="students")
+    course: Mapped["Course"] = relationship(back_populates="students")
 
     def __str__(self) -> str:
         return f"Student ({self.id}, {self.name})"
