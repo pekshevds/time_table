@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Cources</h1>
-    {% for course in courses %}
-        <p>
-            <a href="course/show/{{ course.id }}">{{ course }}</a>
-        </p>
-    {% endfor %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p><a href="courses/">courses</a></p>
+        </div>
+        <div class="col">
+            <p><a href="subjects/">subjects</a></p>
+        </div>
+        <div class="col">
+            
+        </div>
+    </div>
+</div>
 {% endblock %}
