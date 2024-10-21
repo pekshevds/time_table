@@ -1,6 +1,7 @@
 from db import session
 from db.fetchers.course import fetch_course_by_name
 from db.fetchers.subject import fetch_subject_by_name
+from db.fetchers.student import fetch_student_by_name
 from db.models import Student, Course, Subject
 
 
@@ -22,3 +23,13 @@ def get_or_create_new_subject(name: str) -> tuple[Subject, bool]:
     session.add_all([subject])
     session.commit()
     return subject, True
+
+
+def get_or_create_new_student(name: str, course: Course) -> tuple[Student, bool]:
+    student = fetch_student_by_name(name)
+    if student:
+        return student, False
+    student = Student(name=name, course=course)
+    session.add_all([student])
+    session.commit()
+    return student, True

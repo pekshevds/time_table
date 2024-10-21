@@ -7,3 +7,8 @@ class СourseForm(BaseModel):
 
 class SubjectForm(BaseModel):
     name: str
+
+
+class StudentForm(BaseModel):
+    name: str
+    course: int

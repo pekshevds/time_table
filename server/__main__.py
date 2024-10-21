@@ -6,8 +6,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from db.fetchers.course import fetch_courses, fetch_course_by_id
 from db.fetchers.subject import fetch_subjects, fetch_subject_by_id
-from db.services import get_or_create_new_course, get_or_create_new_subject
-from server.models import СourseForm, SubjectForm
+from db.fetchers.student import fetch_students, fetch_student_by_id
+from db.services import (
+    get_or_create_new_course,
+    get_or_create_new_subject,
+    get_or_create_new_student,
+)
+from server.models import СourseForm, SubjectForm, StudentForm
 
 app = FastAPI()
 templates = Jinja2Templates(directory="server/templates")
@@ -98,6 +103,49 @@ def new_subject_post(
 ) -> RedirectResponse:
     subject, _ = get_or_create_new_subject(data.name)
     return RedirectResponse(f"/subject/show/{subject.id}", status_code=302)
+
+
+@app.get("/students/", response_class=HTMLResponse)
+def students(request: Request) -> HTMLResponse:
+    students = fetch_students()
+    return templates.TemplateResponse(
+        request=request,
+        name="student_list.html",
+        context={"students": students, "title": "students"},
+    )
+
+
+@app.get("/student/show/{student_id}/", response_class=HTMLResponse)
+def show_student(request: Request, student_id: int) -> HTMLResponse:
+    student = fetch_student_by_id(id=student_id)
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    return templates.TemplateResponse(
+        request=request,
+        name="student.html",
+        context={"student": student, "title": student.name},
+    )
+
+
+@app.get("/student/new/", response_class=HTMLResponse)
+def new_student_get(request: Request) -> HTMLResponse:
+    courses = fetch_courses()
+    return templates.TemplateResponse(
+        request=request,
+        name="student_new.html",
+        context={"courses": courses, "title": "New ctudent"},
+    )
+
+
+@app.post("/student/new/", response_class=HTMLResponse)
+def new_student_post(
+    request: Request, data: Annotated[StudentForm, Form()]
+) -> RedirectResponse:
+    course = fetch_course_by_id(data.course)
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    student, _ = get_or_create_new_student(data.name, course=course)
+    return RedirectResponse(f"/student/show/{student.id}", status_code=302)
 
 
 if __name__ == "__main__":

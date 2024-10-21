@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Students</h1>
+    {% for student in students %}
+        <p>
+            <a href="/student/show/{{ student.id }}">{{ student }}</a>
+        </p>
+    {% endfor %}
+    <br>
+    <p>
+        <a href="/student/new/">new student</a>
+    </p>
+    <p>
+        <a href="/">index</a>
+    </p>
+{% endblock %}
