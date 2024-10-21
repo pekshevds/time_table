@@ -6,7 +6,7 @@ from db.fetchers.base import fetch_instance_by
 
 
 def fetch_subjects() -> Iterable[Subject]:
-    return session.scalars(select(Subject))
+    return session.scalars(select(Subject).order_by(Subject.name.asc())).all()
 
 
 def fetch_subject_by_id(id: int) -> Subject | None:

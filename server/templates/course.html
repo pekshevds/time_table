@@ -2,10 +2,32 @@
 
 {% block content %}
 <h1>{{ course }}</h1>
-    {% for student in course.students %}
-        <p>{{ student }}</p>
-    {% endfor %}
-    <br>
+
+    <p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    {% for subject in subjects %}
+                    <th>{{ subject.name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in course.students %}
+                <tr>
+                    <td>{{ student }}</td>                    
+                    {% for subject in subjects %}
+                    <td><a href="/record/new/{{ student.id }}/{{ subject.id }}/">...</a></td>
+                    {% endfor %}                    
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
+    </p>
     <p>
         <a href="/courses/">courses</a>
     </p>

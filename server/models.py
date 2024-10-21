@@ -12,3 +12,9 @@ class SubjectForm(BaseModel):
 class StudentForm(BaseModel):
     name: str
     course: int
+
+
+class RecordForm(BaseModel):
+    student: int
+    subject: int
+    mark: int

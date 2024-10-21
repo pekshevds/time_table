@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="/record/new/" method="post">
+    <h1>New record</h1>
+    <p>
+        <label for="student_name">student</label>
+        <input type="text" name="student_name" id="student_name" value="{{ student.name }}" readonly>
+    </p>
+    <p>
+        <label for="subject_name">subject</label>
+        <input type="text" name="subject_name" id="subject_name" value="{{ subject.name }}" readonly>
+    </p>
+    <p>
+        <input type="text" name="student" id="student" value="{{ student.id }}" hidden>
+    </p>
+    <p>
+        <input type="text" name="subject" id="subject" value="{{ subject.id }}" hidden>
+    </p>
+    <p>
+        <label for="mark">Mark</label>
+        <input type="text" name="mark" id="mark">        
+    </p>
+    <p>
+        <input type="submit" value="save">
+    </p>
+</form>
+{% endblock %}

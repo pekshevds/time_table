@@ -6,7 +6,7 @@ from db.fetchers.base import fetch_instance_by
 
 
 def fetch_students() -> Iterable[Student]:
-    return session.scalars(select(Student))
+    return session.scalars(select(Student).order_by(Student.name.asc())).all()
 
 
 def fetch_student_by_id(id: int) -> Student | None:

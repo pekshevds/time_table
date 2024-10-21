@@ -2,7 +2,8 @@ from db import session
 from db.fetchers.course import fetch_course_by_name
 from db.fetchers.subject import fetch_subject_by_name
 from db.fetchers.student import fetch_student_by_name
-from db.models import Student, Course, Subject
+from db.fetchers.mark_table import fetch_record
+from db.models import Student, Course, Subject, MarkTable
 
 
 def get_or_create_new_course(name: str) -> tuple[Course, bool]:
@@ -33,3 +34,11 @@ def get_or_create_new_student(name: str, course: Course) -> tuple[Student, bool]
     session.add_all([student])
     session.commit()
     return student, True
+
+
+def create_or_update_record(student: Student, subject: Subject, makr: int) -> None:
+    record = fetch_record(student, subject)
+    if not record:
+        record = MarkTable(student=student, subject=subject)
+    record.mark = makr
+    session.commit()

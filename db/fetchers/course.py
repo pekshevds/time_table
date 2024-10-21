@@ -6,7 +6,7 @@ from db.fetchers.base import fetch_instance_by
 
 
 def fetch_courses() -> Iterable[Course]:
-    return session.scalars(select(Course))
+    return session.scalars(select(Course).order_by(Course.name.asc())).all()
 
 
 def fetch_course_by_id(id: int) -> Course | None:

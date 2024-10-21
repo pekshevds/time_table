@@ -11,8 +11,9 @@ from db.services import (
     get_or_create_new_course,
     get_or_create_new_subject,
     get_or_create_new_student,
+    create_or_update_record,
 )
-from server.models import СourseForm, SubjectForm, StudentForm
+from server.models import СourseForm, SubjectForm, StudentForm, RecordForm
 
 app = FastAPI()
 templates = Jinja2Templates(directory="server/templates")
@@ -37,15 +38,16 @@ def courses(request: Request) -> HTMLResponse:
     )
 
 
-@app.get("/course/show/{course_id}", response_class=HTMLResponse)
+@app.get("/course/show/{course_id}/", response_class=HTMLResponse)
 def show_course(request: Request, course_id: int) -> HTMLResponse:
     course = fetch_course_by_id(id=course_id)
+    subjects = fetch_subjects()
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
     return templates.TemplateResponse(
         request=request,
         name="course.html",
-        context={"course": course, "title": course.name},
+        context={"course": course, "subjects": subjects, "title": course.name},
     )
 
 
@@ -146,6 +148,36 @@ def new_student_post(
         raise HTTPException(status_code=404, detail="Course not found")
     student, _ = get_or_create_new_student(data.name, course=course)
     return RedirectResponse(f"/student/show/{student.id}", status_code=302)
+
+
+@app.get("/record/new/{student_id}/{subject_id}/", response_class=HTMLResponse)
+def new_record_get(request: Request, student_id: int, subject_id: int) -> HTMLResponse:
+    student = fetch_student_by_id(student_id)
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    subject = fetch_subject_by_id(subject_id)
+    if not subject:
+        raise HTTPException(status_code=404, detail="Subject not found")
+    return templates.TemplateResponse(
+        request=request,
+        name="record_new.html",
+        context={"student": student, "subject": subject, "title": "New record"},
+    )
+
+
+@app.post("/record/new/", response_class=HTMLResponse)
+def new_record_post(
+    request: Request, data: Annotated[RecordForm, Form()]
+) -> RedirectResponse:
+    student = fetch_student_by_id(data.student)
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    subject = fetch_subject_by_id(data.subject)
+    if not subject:
+        raise HTTPException(status_code=404, detail="Subject not found")
+    mark = data.mark
+    create_or_update_record(student=student, subject=subject, makr=mark)
+    return RedirectResponse(f"/course/show/{student.course.id}/", status_code=302)
 
 
 if __name__ == "__main__":
