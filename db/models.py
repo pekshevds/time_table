@@ -57,7 +57,6 @@ class MarkTable(Base):
     __tablename__ = "mark_table"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    date: Mapped[datetime] = mapped_column(Date)
     student_id: Mapped[int] = mapped_column(ForeignKey("student.id"))
     student: Mapped["Student"] = relationship(back_populates="marks")
     subject_id: Mapped[int] = mapped_column(ForeignKey("subject.id"))
@@ -71,7 +70,7 @@ class MarkTable(Base):
 __all__ = (
     "Base",
     "Subject",
-    "Сourse",
+    "Course",
     "Student",
     "MarkTable",
 )

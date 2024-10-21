@@ -8,17 +8,17 @@
             <thead>
                 <tr>
                     <th>Student</th>
-                    {% for subject in subjects %}
+                    {% for subject in table.header %}
                     <th>{{ subject.name }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                {% for student in course.students %}
+                {% for row in table.body %}
                 <tr>
-                    <td>{{ student }}</td>                    
-                    {% for subject in subjects %}
-                    <td><a href="/record/new/{{ student.id }}/{{ subject.id }}/">...</a></td>
+                    <td>{{ row.student.name }}</td>                    
+                    {% for mark in row.marks %}
+                    <td><a href="/record/new/{{ row.student.id }}/{{ mark.subject.id }}/">{{ mark.mark }}</a></td>
                     {% endfor %}                    
                 </tr>
                 {% endfor %}
@@ -29,7 +29,7 @@
         </table>
     </p>
     <p>
-        <a href="/courses/">courses</a>
+        <a href="/course/list/">courses</a>
     </p>
     <p>
         <a href="/">index</a>

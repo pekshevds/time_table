@@ -40,5 +40,6 @@ def create_or_update_record(student: Student, subject: Subject, makr: int) -> No
     record = fetch_record(student, subject)
     if not record:
         record = MarkTable(student=student, subject=subject)
+        session.add_all([record])
     record.mark = makr
     session.commit()
