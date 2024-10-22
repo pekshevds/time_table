@@ -1,4 +1,4 @@
-from typing import Iterable, List
+from typing import Iterable
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from db import session
@@ -23,16 +23,16 @@ class Mark(BaseModel):
 
 class Row(BaseModel):
     student: PStudent
-    marks: List[Mark] = Field(default_factory=list)
+    marks: list[Mark] = Field(default_factory=list)
 
 
 class Table(BaseModel):
     header: list[PSubject] = Field(default_factory=list)
-    body: List[Row] = Field(default_factory=list)
+    body: list[Row] = Field(default_factory=list)
 
 
 def fetch_mark_table_by_course(course: Course) -> Iterable[MarkTable]:
-    statement = select(MarkTable).where(MarkTable.student.course == course)
+    statement = select(MarkTable).where(Student.course == course)
     return session.scalars(statement).all()
 
 
@@ -59,9 +59,10 @@ def fetch_full_mark_table_by_course(course: Course) -> Table:
                 if record.student == student and record.subject == subject:
                     mark = record.mark
                     break
-            mark = Mark(subject=PSubject(id=subject.id, name=subject.name), mark=mark)
-            marks.append(mark)
-        row = Row(student=PStudent(id=student.id, name=student.name), marks=marks)
-        rows.append(row)
-    table = Table(body=rows, header=header)
-    return table
+            marks.append(
+                Mark(subject=PSubject(id=subject.id, name=subject.name), mark=mark)
+            )
+        rows.append(
+            Row(student=PStudent(id=student.id, name=student.name), marks=marks)
+        )
+    return Table(body=rows, header=header)
